@@ -1,5 +1,5 @@
 use crate::commands::main::prompt_to_open;
-use crate::fetch::versions::get_versions;
+use crate::utils::versions::get_versions;
 use dialoguer::{theme::ColorfulTheme, Select};
 use std::env;
 use std::path::PathBuf;

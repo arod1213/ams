@@ -1,4 +1,4 @@
-use crate::{daw::models::Daw, file::get::get_extension};
+use crate::{daw::models::Daw, utils::file::get_extension};
 use std::path::Path;
 
 pub fn is_backup(path: &Path, daws: &[Daw]) -> bool {

@@ -1,5 +1,5 @@
 use crate::commands::main::prompt_to_open;
-use crate::fetch::versions::{get_version, get_versions};
+use crate::utils::versions::{get_version, get_versions};
 use std::env;
 use std::path::PathBuf;
 

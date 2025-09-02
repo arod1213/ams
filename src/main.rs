@@ -1,9 +1,6 @@
 mod args;
 mod commands;
 mod daw;
-mod fetch;
-mod file;
-mod search;
 mod sort;
 mod utils;
 

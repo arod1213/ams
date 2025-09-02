@@ -1,5 +1,5 @@
 use crate::daw::models::Daw;
-use crate::file::get::get_extension;
+use crate::utils::file::get_extension;
 use std::path::Path;
 
 fn is_audio(path: &Path) -> bool {
