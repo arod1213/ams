@@ -29,7 +29,8 @@ pub fn is_audio(path: &Path) -> bool {
 
 pub fn is_bounce(path: &Path) -> bool {
     let path_name = path.to_str().unwrap();
-    if path_name.to_lowercase().contains("stem") {
+    let path_name = path_name.to_lowercase();
+    if path_name.contains("stem") {
         return false;
     }
 
@@ -43,8 +44,8 @@ pub fn is_bounce(path: &Path) -> bool {
     };
     let parent_low = parent.to_str().unwrap().to_lowercase();
     !(parent_low.contains("media")
-        | parent_low.contains("audio files")
-        | parent_low.contains("samples"))
+        | path_name.contains("audio files")
+        | path_name.contains("samples"))
 }
 
 pub enum Daw {
