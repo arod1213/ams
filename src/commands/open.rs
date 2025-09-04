@@ -15,7 +15,6 @@ pub fn open_file(version_num: isize, is_audio: &bool, show_backups: &bool) {
     let version = match get_version(&versions, version_num) {
         Some(s) => s,
         None => {
-            eprintln!("Invalid version number");
             return;
         }
     };
