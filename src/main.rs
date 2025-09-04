@@ -18,12 +18,12 @@ fn main() {
     match args.command {
         Command::Open {
             version: version_num,
-            song,
+            audio,
         } => {
-            open_file(version_num, &song, &false);
+            open_file(version_num, &audio, &false);
         }
-        Command::List { song, backups } => {
-            list_files(&song, &backups);
+        Command::List { audio, backups } => {
+            list_files(&audio, &backups);
         }
     };
 }

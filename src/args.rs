@@ -14,12 +14,12 @@ pub enum Command {
         version: isize,
 
         #[arg(short, long, default_value_t = false)]
-        song: bool,
+        audio: bool,
     },
 
     List {
         #[arg(short, long, default_value_t = false)]
-        song: bool,
+        audio: bool,
 
         #[arg(short, long, default_value_t = false)]
         backups: bool,
