@@ -18,13 +18,13 @@
 
 use std::path::Path;
 
-const AUDIO_FORMATS: [&str; 4] = ["wav", "mp3", "aif", "aiff"];
 pub fn is_audio(path: &Path) -> bool {
+    let audio_formats: [&str; 4] = ["wav", "mp3", "aif", "aiff"];
     let ext = match path.extension() {
         Some(v) => v.to_str().unwrap(),
         None => return false,
     };
-    AUDIO_FORMATS.contains(&ext)
+    audio_formats.contains(&ext)
 }
 
 pub fn is_bounce(path: &Path) -> bool {
