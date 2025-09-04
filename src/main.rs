@@ -16,7 +16,10 @@ fn main() {
     let args = Args::parse();
 
     match args.command {
-        Command::Open { version_num, song } => {
+        Command::Open {
+            version: version_num,
+            song,
+        } => {
             open_file(version_num, &song, &false);
         }
         Command::List { song, backups } => {

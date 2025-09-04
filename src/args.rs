@@ -11,7 +11,7 @@ pub struct Args {
 pub enum Command {
     Open {
         #[arg(short, long, default_value_t = 0)]
-        version_num: isize,
+        version: isize,
 
         #[arg(short, long, default_value_t = false)]
         song: bool,
