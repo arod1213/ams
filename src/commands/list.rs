@@ -1,17 +1,17 @@
 use crate::commands::main::prompt_to_open;
-use crate::utils::versions::get_versions;
-use dialoguer::{theme::ColorfulTheme, Select};
+use crate::versions::get_versions;
+use dialoguer::{Select, theme::ColorfulTheme};
 use std::env;
 use std::path::PathBuf;
 
-pub fn list_files(is_audio: &bool) {
+pub fn list_files(is_audio: &bool, show_backups: &bool) {
     let path: PathBuf = match env::current_dir() {
         Ok(s) => s,
         Err(_) => {
             panic!("No current dir found");
         }
     };
-    let versions = get_versions(&path.as_path(), &is_audio);
+    let versions = get_versions(&path.as_path(), is_audio, show_backups);
 
     if versions.len() == 0 {
         eprintln!("No versions found");

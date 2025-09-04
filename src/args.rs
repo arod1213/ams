@@ -14,11 +14,14 @@ pub enum Command {
         version_num: isize,
 
         #[arg(short, long, default_value_t = false)]
-        bounce: bool,
+        song: bool,
     },
 
     List {
         #[arg(short, long, default_value_t = false)]
-        bounce: bool,
+        song: bool,
+
+        #[arg(short, long, default_value_t = false)]
+        backups: bool,
     },
 }

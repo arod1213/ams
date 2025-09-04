@@ -1,31 +1,45 @@
-use crate::daw::sessions::is_backup;
-use crate::daw::{audio::is_bounce, models::fetch_daws};
+use crate::models::{Daw, is_audio, is_bounce};
 use crate::sort::sort_by_date;
 use std::path::Path;
 use walkdir::{DirEntry, WalkDir};
 
-pub fn get_versions(path: &Path, is_audio: &bool) -> Vec<DirEntry> {
-    let daws = fetch_daws();
+fn valid_audio(entry: DirEntry) -> Option<DirEntry> {
+    let file_path = entry.path();
+    if !is_audio(&file_path) {
+        return None;
+    }
+    if is_bounce(&file_path) {
+        return Some(entry);
+    };
+    None
+}
+fn valid_session(entry: DirEntry, show_backups: &bool) -> Option<DirEntry> {
+    let file_path = entry.path();
+    let Some(ext) = file_path.extension() else {
+        return None;
+    };
+    let ext = ext.to_str().unwrap();
+    match Daw::from_extension(&ext) {
+        Some(v) => {
+            if v.is_backup(file_path) && !show_backups {
+                return None;
+            }
+            return Some(entry);
+        }
+        None => None,
+    }
+}
+
+pub fn get_versions(path: &Path, is_audio: &bool, show_backups: &bool) -> Vec<DirEntry> {
     let mut versions: Vec<DirEntry> = WalkDir::new(path)
         .into_iter()
         .filter_map(|entry| {
-            let Ok(file) = entry else {
+            let Ok(entry) = entry else {
                 return None;
             };
-            let file_path = file.path();
             match is_audio {
-                true => {
-                    if is_bounce(&file_path, &daws) {
-                        return Some(file);
-                    };
-                    return None;
-                }
-                false => {
-                    if is_backup(&file_path, &daws) {
-                        return None;
-                    }
-                    return Some(file);
-                }
+                true => valid_audio(entry),
+                false => valid_session(entry, &show_backups),
             }
         })
         .collect();

@@ -1,16 +1,16 @@
 use crate::commands::main::prompt_to_open;
-use crate::utils::versions::{get_version, get_versions};
+use crate::versions::{get_version, get_versions};
 use std::env;
 use std::path::PathBuf;
 
-pub fn open_file(version_num: isize, is_audio: &bool) {
+pub fn open_file(version_num: isize, is_audio: &bool, show_backups: &bool) {
     let path: PathBuf = match env::current_dir() {
         Ok(s) => s,
         Err(_) => {
             panic!("No current dir found");
         }
     };
-    let versions = get_versions(&path.as_path(), &is_audio);
+    let versions = get_versions(&path.as_path(), is_audio, show_backups);
 
     let version = match get_version(&versions, version_num) {
         Some(s) => s,

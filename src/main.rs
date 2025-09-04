@@ -1,8 +1,8 @@
 mod args;
 mod commands;
-mod daw;
+mod models;
 mod sort;
-mod utils;
+mod versions;
 
 use clap::Parser;
 
@@ -16,22 +16,12 @@ fn main() {
     let args = Args::parse();
 
     match args.command {
-        Command::Open {
-            version_num,
-            bounce,
-        } => {
-            if bounce {
-                open_file(version_num, &true);
-            } else {
-                open_file(version_num, &false);
-            }
+        Command::Open { version_num, song } => {
+            open_file(version_num, &song, &false);
+            open_file(version_num, &song, &false);
         }
-        Command::List { bounce } => {
-            if bounce {
-                list_files(&true);
-            } else {
-                list_files(&false);
-            }
+        Command::List { song, backups } => {
+            list_files(&song, &backups);
         }
     };
 }
