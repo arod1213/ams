@@ -48,7 +48,7 @@ pub fn get_versions(path: &Path, is_audio: &bool, show_backups: &bool) -> Vec<Di
     versions
 }
 
-fn index_vec(vec: &Vec<DirEntry>, num: isize) -> Option<DirEntry> {
+fn index_vec<'a>(vec: &'a Vec<DirEntry>, num: isize) -> Option<&'a DirEntry> {
     let index = if num >= 0 {
         num as usize
     } else {
@@ -57,12 +57,12 @@ fn index_vec(vec: &Vec<DirEntry>, num: isize) -> Option<DirEntry> {
     };
 
     if index.abs_diff(0) < vec.iter().count() {
-        return Some(vec[index].to_owned());
+        return Some(&vec[index]);
     }
     return None;
 }
 
-pub fn get_version(versions: &Vec<DirEntry>, version_num: isize) -> Option<DirEntry> {
+pub fn get_version<'a>(versions: &'a Vec<DirEntry>, version_num: isize) -> Option<&'a DirEntry> {
     if versions.len() == 0 {
         eprintln!("No files found");
         return None;
