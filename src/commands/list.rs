@@ -5,10 +5,7 @@ use std::env;
 use std::path::PathBuf;
 use walkdir::DirEntry;
 
-pub fn list_files<F>(f: F, name: Option<String>)
-where
-    F: Fn(DirEntry) -> Option<DirEntry>,
-{
+pub fn list_files<F: Fn(DirEntry) -> Option<DirEntry>>(f: F, name: Option<String>) {
     let path: PathBuf = match env::current_dir() {
         Ok(s) => s,
         Err(_) => {

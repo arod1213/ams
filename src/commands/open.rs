@@ -5,7 +5,7 @@ use crate::versions::{GetVersionInput, get_version, get_versions};
 use std::env;
 use std::path::PathBuf;
 
-pub fn open_file(version_num: isize, f: fn(DirEntry) -> Option<DirEntry>) {
+pub fn open_file<F: Fn(DirEntry) -> Option<DirEntry>>(version_num: isize, f: F) {
     let path: PathBuf = match env::current_dir() {
         Ok(s) => s,
         Err(_) => {
