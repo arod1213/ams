@@ -1,34 +1,6 @@
-use crate::models::{Daw, is_audio, is_bounce};
 use crate::sort::sort_by_date;
 use std::path::Path;
 use walkdir::{DirEntry, WalkDir};
-
-fn valid_audio(entry: DirEntry) -> Option<DirEntry> {
-    let file_path = entry.path();
-    if !is_audio(&file_path) {
-        return None;
-    }
-    if is_bounce(&file_path) {
-        return Some(entry);
-    };
-    None
-}
-fn valid_session(entry: DirEntry, show_backups: bool) -> Option<DirEntry> {
-    let file_path = entry.path();
-    let Some(ext) = file_path.extension() else {
-        return None;
-    };
-    let ext = ext.to_str().unwrap();
-    match Daw::from_extension(&ext) {
-        Some(v) => {
-            if v.is_backup(file_path) && !show_backups {
-                return None;
-            }
-            return Some(entry);
-        }
-        None => None,
-    }
-}
 
 fn is_hidden(entry: &DirEntry) -> bool {
     entry
@@ -63,19 +35,20 @@ fn is_name_match(entry: &DirEntry, name: &Option<String>) -> bool {
     true
 }
 
-pub struct GetVersionInput<'a> {
+pub struct GetVersionInput<'a, F>
+where
+    F: Fn(DirEntry) -> Option<DirEntry>,
+{
     pub path: &'a Path,
-    pub is_audio: bool,
-    pub show_backups: bool,
+    pub f: F,
     pub name: Option<String>,
 }
-pub fn get_versions(input: GetVersionInput) -> Vec<DirEntry> {
-    let GetVersionInput {
-        path,
-        is_audio,
-        show_backups,
-        name,
-    } = input;
+
+pub fn get_versions<F>(input: GetVersionInput<F>) -> Vec<DirEntry>
+where
+    F: Fn(DirEntry) -> Option<DirEntry>,
+{
+    let GetVersionInput { path, f, name } = input;
     let mut versions: Vec<DirEntry> = WalkDir::new(path)
         .into_iter()
         .filter_entry(|entry| {
@@ -91,10 +64,7 @@ pub fn get_versions(input: GetVersionInput) -> Vec<DirEntry> {
             if !is_name_match(&entry, &name) {
                 return None;
             }
-            match is_audio {
-                true => valid_audio(entry),
-                false => valid_session(entry, show_backups),
-            }
+            f(entry)
         })
         .collect();
 

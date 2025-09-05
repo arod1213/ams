@@ -3,6 +3,8 @@ use std::error::Error;
 use std::path::Path;
 use std::process::Command;
 
+use crate::models::is_audio;
+
 fn open_file(path: &Path) {
     let status = Command::new("open")
         .arg(path)
@@ -38,7 +40,7 @@ pub fn preview_audio(path: &Path) -> std::io::Result<()> {
     Ok(())
 }
 
-pub fn prompt_to_open(path: &Path, is_audio: bool) -> Result<(), Box<dyn Error>> {
+pub fn prompt_to_open(path: &Path) -> Result<(), Box<dyn Error>> {
     match Confirm::new()
         .with_prompt("Would you like to open this file?")
         .interact()
@@ -48,9 +50,9 @@ pub fn prompt_to_open(path: &Path, is_audio: bool) -> Result<(), Box<dyn Error>>
         true => (),
     };
 
-    match is_audio {
+    open_file_in_finder(path);
+    match is_audio(&path) {
         true => {
-            open_file_in_finder(path);
             let _ = preview_audio(path);
         }
         false => {

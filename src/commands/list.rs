@@ -3,8 +3,12 @@ use crate::versions::{GetVersionInput, get_versions};
 use dialoguer::{Select, theme::ColorfulTheme};
 use std::env;
 use std::path::PathBuf;
+use walkdir::DirEntry;
 
-pub fn list_files(is_audio: bool, show_backups: bool, name: Option<String>) {
+pub fn list_files<F>(f: F, name: Option<String>)
+where
+    F: Fn(DirEntry) -> Option<DirEntry>,
+{
     let path: PathBuf = match env::current_dir() {
         Ok(s) => s,
         Err(_) => {
@@ -13,8 +17,7 @@ pub fn list_files(is_audio: bool, show_backups: bool, name: Option<String>) {
     };
     let input = GetVersionInput {
         path: &path.as_path(),
-        is_audio,
-        show_backups,
+        f,
         name,
     };
     let versions = get_versions(input);
@@ -38,12 +41,12 @@ pub fn list_files(is_audio: bool, show_backups: bool, name: Option<String>) {
         .items(&display)
         .default(0)
         .interact()
-        .ok(); // handle user cancel
+        .ok();
 
     match &selection {
         Some(s) => {
             let selected_entry = &versions[*s];
-            let _ = prompt_to_open(selected_entry.path(), is_audio);
+            let _ = prompt_to_open(selected_entry.path());
         }
         None => return,
     }

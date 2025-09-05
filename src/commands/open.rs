@@ -1,9 +1,11 @@
+use walkdir::DirEntry;
+
 use crate::commands::main::prompt_to_open;
 use crate::versions::{GetVersionInput, get_version, get_versions};
 use std::env;
 use std::path::PathBuf;
 
-pub fn open_file(version_num: isize, is_audio: bool, show_backups: bool) {
+pub fn open_file(version_num: isize, f: fn(DirEntry) -> Option<DirEntry>) {
     let path: PathBuf = match env::current_dir() {
         Ok(s) => s,
         Err(_) => {
@@ -12,8 +14,7 @@ pub fn open_file(version_num: isize, is_audio: bool, show_backups: bool) {
     };
     let input = GetVersionInput {
         path: &path.as_path(),
-        is_audio,
-        show_backups,
+        f,
         name: None,
     };
     let versions = get_versions(input);
@@ -35,5 +36,5 @@ pub fn open_file(version_num: isize, is_audio: bool, show_backups: bool) {
     };
 
     println!("Found: V{:?} {:?}", num, version_name);
-    let _ = prompt_to_open(&version_path, is_audio);
+    let _ = prompt_to_open(&version_path);
 }

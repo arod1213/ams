@@ -1,21 +1,3 @@
-// list of extension (backup and main)
-// names of backup folders
-//
-// Ableton (.als) -> (Backup)
-// Pro tools (.ptx .bak.ptx, .ptf, .bak.ptf) -> (Session File Backups)
-// Fl studio (.flp)
-// Logic (.logicx, .logic)
-// Reaper (.rpp, .rpp-bak) -> (Backups)
-// Cubase (.cpr, .bak)
-// Reason (.reason)
-
-// Primary Extension
-// Backup Extension
-// Backup Folder(s)
-
-// if not primary or backup extension -> remove
-// if backups disabled, hide backup extensions / backup folders
-
 use std::path::Path;
 
 pub fn is_audio(path: &Path) -> bool {
