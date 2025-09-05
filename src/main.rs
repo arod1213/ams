@@ -4,8 +4,6 @@ mod models;
 mod sort;
 mod versions;
 
-use std::env;
-
 use clap::Parser;
 
 use args::{Args, Command};
@@ -16,10 +14,6 @@ use crate::commands::{list::list_files, open::open_file};
 fn main() {
     dotenv().ok();
     let args = Args::parse();
-
-    let Ok(_) = env::set_current_dir("/Users/aidanrodriguez") else {
-        return;
-    };
 
     match args.command {
         Command::Open {
