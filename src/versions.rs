@@ -1,5 +1,5 @@
 use crate::sort::sort_by_date;
-use std::{path::Path, time::Instant};
+use std::{env::home_dir, path::Path, time::Instant};
 use walkdir::{DirEntry, WalkDir};
 
 fn is_hidden(entry: &DirEntry) -> bool {
@@ -18,7 +18,9 @@ fn should_skip(entry: &DirEntry) -> bool {
     if skip_dirs.iter().any(|&x| path.starts_with(x)) {
         return true;
     }
-    if path.starts_with("/Users") && path.to_str().unwrap().contains("Applications") {
+    let home_dir = home_dir().unwrap();
+    if path == home_dir.join("Applications").as_path() || path == home_dir.join("Library").as_path()
+    {
         return true;
     }
     false

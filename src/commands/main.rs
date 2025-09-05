@@ -35,7 +35,6 @@ pub fn preview_audio(path: &Path) -> std::io::Result<()> {
         .arg("-a")
         .arg("QuickTime Player")
         .arg(path)
-        // qlmanage -p blocks until you close preview, so spawn instead of output() if you want non-blocking:
         .spawn()?;
     // .output();
     Ok(())
