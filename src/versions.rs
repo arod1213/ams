@@ -52,7 +52,30 @@ fn should_skip(entry: &DirEntry) -> bool {
     false
 }
 
-pub fn get_versions(path: &Path, is_audio: bool, show_backups: bool) -> Vec<DirEntry> {
+fn is_name_match(entry: &DirEntry, name: &Option<String>) -> bool {
+    let Some(name) = name else { return true };
+
+    if let Some(file_name) = entry.path().to_str() {
+        if !file_name.to_lowercase().contains(&name.to_lowercase()) {
+            return false;
+        }
+    }
+    true
+}
+
+pub struct GetVersionInput<'a> {
+    pub path: &'a Path,
+    pub is_audio: bool,
+    pub show_backups: bool,
+    pub name: Option<String>,
+}
+pub fn get_versions(input: GetVersionInput) -> Vec<DirEntry> {
+    let GetVersionInput {
+        path,
+        is_audio,
+        show_backups,
+        name,
+    } = input;
     let mut versions: Vec<DirEntry> = WalkDir::new(path)
         .into_iter()
         .filter_entry(|entry| {
@@ -65,6 +88,9 @@ pub fn get_versions(path: &Path, is_audio: bool, show_backups: bool) -> Vec<DirE
             let Ok(entry) = entry else {
                 return None;
             };
+            if !is_name_match(&entry, &name) {
+                return None;
+            }
             match is_audio {
                 true => valid_audio(entry),
                 false => valid_session(entry, show_backups),

@@ -22,8 +22,12 @@ fn main() {
         } => {
             open_file(version_num, audio, false);
         }
-        Command::List { audio, backups } => {
-            list_files(audio, backups);
+        Command::List {
+            audio,
+            backups,
+            name,
+        } => {
+            list_files(audio, backups, name);
         }
     };
 }

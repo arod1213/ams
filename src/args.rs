@@ -23,5 +23,8 @@ pub enum Command {
 
         #[arg(short, long, default_value_t = false)]
         backups: bool,
+
+        #[arg(short, long)]
+        name: Option<String>,
     },
 }

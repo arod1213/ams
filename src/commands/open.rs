@@ -1,5 +1,5 @@
 use crate::commands::main::prompt_to_open;
-use crate::versions::{get_version, get_versions};
+use crate::versions::{GetVersionInput, get_version, get_versions};
 use std::env;
 use std::path::PathBuf;
 
@@ -10,7 +10,13 @@ pub fn open_file(version_num: isize, is_audio: bool, show_backups: bool) {
             panic!("No current dir found");
         }
     };
-    let versions = get_versions(&path.as_path(), is_audio, show_backups);
+    let input = GetVersionInput {
+        path: &path.as_path(),
+        is_audio,
+        show_backups,
+        name: None,
+    };
+    let versions = get_versions(input);
 
     let version = match get_version(&versions, version_num) {
         Some(s) => s,
