@@ -28,10 +28,8 @@ fn valid_audio(entry: DirEntry, show_all: bool) -> Option<DirEntry> {
 
 fn valid_session(entry: DirEntry, show_backups: bool) -> Option<DirEntry> {
     let file_path = entry.path();
-    let Some(ext) = file_path.extension() else {
-        return None;
-    };
-    let ext = ext.to_str().unwrap();
+    let ext = file_path.extension()?.to_str()?;
+
     match Daw::from_extension(&ext) {
         Some(v) => {
             if v.is_backup(file_path) && !show_backups {

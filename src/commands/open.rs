@@ -27,7 +27,7 @@ pub fn open_file<F: Fn(DirEntry) -> Option<DirEntry>>(version_num: isize, f: F) 
     };
 
     let version_path = version.path();
-    let version_name = version.file_name().to_str().unwrap();
+    let version_name = version.file_name().to_str().expect("no file name found");
 
     let num = if version_num >= 0 {
         versions.iter().count() as isize - version_num
