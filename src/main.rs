@@ -4,6 +4,8 @@ mod models;
 mod sort;
 mod versions;
 
+use std::env;
+
 use clap::Parser;
 
 use args::{Args, Command};
@@ -12,7 +14,7 @@ use walkdir::DirEntry;
 
 use crate::{
     commands::{list::list_files, open::open_file},
-    models::{Daw, is_audio, is_bounce},
+    models::{is_audio, is_bounce, Daw},
 };
 
 fn valid_audio(entry: DirEntry, show_all: bool) -> Option<DirEntry> {
@@ -44,6 +46,8 @@ fn valid_session(entry: DirEntry, show_backups: bool) -> Option<DirEntry> {
 fn main() {
     dotenv().ok();
     let args = Args::parse();
+
+    env::set_current_dir("/Users/aidan").unwrap();
 
     match args.command {
         Command::Open {

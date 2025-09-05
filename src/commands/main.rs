@@ -31,8 +31,9 @@ fn open_file_in_finder(path: &Path) {
 }
 
 pub fn preview_audio(path: &Path) -> std::io::Result<()> {
-    let _ = Command::new("qlmanage")
-        .arg("-p")
+    let _ = Command::new("open")
+        .arg("-a")
+        .arg("QuickTime Player")
         .arg(path)
         // qlmanage -p blocks until you close preview, so spawn instead of output() if you want non-blocking:
         .spawn()?;

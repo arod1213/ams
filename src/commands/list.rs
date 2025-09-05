@@ -1,8 +1,9 @@
 use crate::commands::main::prompt_to_open;
-use crate::versions::{GetVersionInput, get_versions};
-use dialoguer::{Select, theme::ColorfulTheme};
+use crate::versions::{get_versions, GetVersionInput};
+use dialoguer::{theme::ColorfulTheme, Select};
 use std::env;
 use std::path::PathBuf;
+use std::time::Instant;
 use walkdir::DirEntry;
 
 pub fn list_files<F: Fn(DirEntry) -> Option<DirEntry>>(f: F, name: Option<String>) {
@@ -17,6 +18,7 @@ pub fn list_files<F: Fn(DirEntry) -> Option<DirEntry>>(f: F, name: Option<String
         f,
         name,
     };
+
     let versions = get_versions(input);
 
     if versions.len() == 0 {
