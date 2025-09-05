@@ -38,7 +38,7 @@ pub fn preview_audio(path: &Path) -> std::io::Result<()> {
     Ok(())
 }
 
-pub fn prompt_to_open(path: &Path, is_audio: &bool) -> Result<(), Box<dyn Error>> {
+pub fn prompt_to_open(path: &Path, is_audio: bool) -> Result<(), Box<dyn Error>> {
     match Confirm::new()
         .with_prompt("Would you like to open this file?")
         .interact()
@@ -48,7 +48,7 @@ pub fn prompt_to_open(path: &Path, is_audio: &bool) -> Result<(), Box<dyn Error>
         true => (),
     };
 
-    match *is_audio {
+    match is_audio {
         true => {
             open_file_in_finder(path);
             let _ = preview_audio(path);

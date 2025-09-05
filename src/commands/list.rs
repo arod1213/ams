@@ -3,15 +3,18 @@ use crate::versions::get_versions;
 use dialoguer::{Select, theme::ColorfulTheme};
 use std::env;
 use std::path::PathBuf;
+use std::time::Instant;
 
-pub fn list_files(is_audio: &bool, show_backups: &bool) {
+pub fn list_files(is_audio: bool, show_backups: bool) {
     let path: PathBuf = match env::current_dir() {
         Ok(s) => s,
         Err(_) => {
             panic!("No current dir found");
         }
     };
+    let curr_time = Instant::now();
     let versions = get_versions(&path.as_path(), is_audio, show_backups);
+    println!("elapsed {}s", curr_time.elapsed().as_millis());
 
     if versions.len() == 0 {
         eprintln!("No versions found");
@@ -37,7 +40,7 @@ pub fn list_files(is_audio: &bool, show_backups: &bool) {
     match &selection {
         Some(s) => {
             let selected_entry = &versions[*s];
-            let _ = prompt_to_open(selected_entry.path(), &is_audio);
+            let _ = prompt_to_open(selected_entry.path(), is_audio);
         }
         None => return,
     }

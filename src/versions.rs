@@ -13,7 +13,7 @@ fn valid_audio(entry: DirEntry) -> Option<DirEntry> {
     };
     None
 }
-fn valid_session(entry: DirEntry, show_backups: &bool) -> Option<DirEntry> {
+fn valid_session(entry: DirEntry, show_backups: bool) -> Option<DirEntry> {
     let file_path = entry.path();
     let Some(ext) = file_path.extension() else {
         return None;
@@ -30,16 +30,44 @@ fn valid_session(entry: DirEntry, show_backups: &bool) -> Option<DirEntry> {
     }
 }
 
-pub fn get_versions(path: &Path, is_audio: &bool, show_backups: &bool) -> Vec<DirEntry> {
+fn is_hidden(entry: &DirEntry) -> bool {
+    entry
+        .file_name()
+        .to_str()
+        .map(|s| s.starts_with('.'))
+        .unwrap_or(false)
+}
+
+// skip large directories where files sessions should not be stored
+fn should_skip(entry: &DirEntry) -> bool {
+    let path = entry.path();
+    let skip_dirs = ["/System", "/Applications", "/Library"];
+
+    if skip_dirs.iter().any(|&x| path.starts_with(x)) {
+        return true;
+    }
+    if path.starts_with("/Users") && path.to_str().unwrap().contains("Applications") {
+        return true;
+    }
+    false
+}
+
+pub fn get_versions(path: &Path, is_audio: bool, show_backups: bool) -> Vec<DirEntry> {
     let mut versions: Vec<DirEntry> = WalkDir::new(path)
         .into_iter()
+        .filter_entry(|entry| {
+            if should_skip(&entry) | entry.path_is_symlink() | is_hidden(&entry) {
+                return false;
+            }
+            true
+        })
         .filter_map(|entry| {
             let Ok(entry) = entry else {
                 return None;
             };
             match is_audio {
                 true => valid_audio(entry),
-                false => valid_session(entry, &show_backups),
+                false => valid_session(entry, show_backups),
             }
         })
         .collect();

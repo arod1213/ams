@@ -3,7 +3,7 @@ use crate::versions::{get_version, get_versions};
 use std::env;
 use std::path::PathBuf;
 
-pub fn open_file(version_num: isize, is_audio: &bool, show_backups: &bool) {
+pub fn open_file(version_num: isize, is_audio: bool, show_backups: bool) {
     let path: PathBuf = match env::current_dir() {
         Ok(s) => s,
         Err(_) => {
