@@ -1,5 +1,6 @@
 use crate::sort::sort_by_date;
-use std::{env::home_dir, path::Path, time::Instant};
+use dirs::home_dir;
+use std::path::Path;
 use walkdir::{DirEntry, WalkDir};
 
 fn is_hidden(entry: &DirEntry) -> bool {
