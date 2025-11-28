@@ -1,5 +1,5 @@
 
-# **AMS — Audio Project Session Finder**
+# **AMS — Audio Management System**
 
 AMS is a lightweight command-line tool that scans your file system for audio production project files. From your current working directory, AMS recursively searches for **Ableton Live**, **Pro Tools**, **Logic Pro X**, **Cubase**, and **Reaper** sessions—then returns them sorted from **most recent → oldest** with fast paging and simple commands.
 
