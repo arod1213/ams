@@ -33,12 +33,12 @@ Place the compiled `ams` binary into `/usr/local/bin`:
 
 Run AMS from **any folder** you want to search (e.g., your music folder):
 
-`cd ~/Music
+
+```bash
+cd ~/Music
 
 ams list -n "My Song"
-` 
-
-AMS will scan recursively and present a list of all discovered projects.
+```
 
 ----------
 
