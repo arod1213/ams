@@ -23,10 +23,13 @@ AMS is a lightweight command-line tool that scans your file system for audio pro
 
 ## **Installation**
 
-Place the compiled `ams` binary into `/usr/local/bin`:
+Download the archive for your platform from **GitHub Releases**, extract it, and place the binary on your `PATH`.
 
-`sudo install ams /usr/local/bin` 
+Examples:
 
+```bash
+sudo install ams /usr/local/bin
+```
 ----------
 
 ## **Usage Overview**
